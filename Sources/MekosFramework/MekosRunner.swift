@@ -6,37 +6,18 @@
 //
 //
 
-import Yams
 import PathKit
 
 public struct MekosRunner {
 
-    private let dotfiles: [Path]
+    let configuration: Configuration
 
-    public init(configFile: Path) throws {
-        // Read configuration from file
-        let configuration: String = try configFile.read()
-        let yaml = try Yams.load(yaml: configuration) as? [String: [String]]
-
-        // Read list of dotfiles
-        guard let dotfilesList = yaml?["dotfiles"] else {
-            throw MekosError.missingTask(name: "dotfiles")
-        }
-
-        // Valid given dotfiles and create Path objects from it
-        self.dotfiles = try dotfilesList.map { path -> Path in
-            let file = Path(path)
-
-            guard file.isFile else {
-                throw MekosError.invalidDotfile(file: path)
-            }
-
-            return file.absolute()
-        }
+    public init(configuration: Configuration) throws {
+        self.configuration = configuration
     }
 
     public func linkDotfiles() throws {
-        for file in dotfiles {
+        for file in configuration.dotfiles {
             // Symlink must be normalized because of `~` resolving
             let symlink = Path("~/\(file.lastComponent)").normalize()
 

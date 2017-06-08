@@ -1,10 +1,9 @@
 import Foundation
 import MekosFramework
 
-print("Running Mekos")
-
 do {
-    let runner = try MekosRunner(configFile: ".mekos.yaml")
+    let configuration = try Configuration(configurationFile: ".mekos.yaml")
+    let runner = try MekosRunner(configuration: configuration)
 
     try runner.linkDotfiles()
 } catch {
