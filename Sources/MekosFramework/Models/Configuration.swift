@@ -52,6 +52,13 @@ public struct Configuration {
         self.logger = logger
     }
 
+    /// Creates configured task.
+    ///
+    /// - Parameters:
+    ///   - task: Type of task which should be configured
+    ///   - key: Configuration key in yaml file
+    /// - Returns: New instance of configured task
+    /// - Throws: MekosError if task cannot be configured correctly
     internal func configure(task: TaskType.Type, for key: String) throws -> TaskType? {
         // Search given configuration for requested key
         guard let configuration = tasksConfiguration[key] else {
