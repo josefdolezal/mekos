@@ -10,7 +10,6 @@ import Foundation
 
 /// Interface of runnable tasks
 protocol TaskType {
-
     /// Creates new task instance with given configuration.
     ///
     /// - Parameter configuration: Task configuration
@@ -21,4 +20,7 @@ protocol TaskType {
     ///
     /// - Throws: MekosError on runtime error
     func run() throws
+
+    /// Task logging service
+    var logger: Logger? { get set }
 }

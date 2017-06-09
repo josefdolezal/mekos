@@ -17,12 +17,18 @@ public struct Configuration {
     /// Yaml representation of tasks configuration
     let tasksConfiguration: TasksConfiguration
 
+    /// Tasks logger
+    let logger: Logger?
+
     /// Creates new instance with configuration loaded from file.
     /// The given file must be valid yaml.
     ///
-    /// - Parameter configurationFile: Path for yaml configuration file
+    /// - Parameters:
+    ///   - configurationFile: Path for yaml configuration file
+    ///   - logger: Tasks logger
+    /// - Parameter configurationFile:
     /// - Throws: MekosError when given path is not valid yaml file
-    public init(configurationFile: Path) throws {
+    public init(configurationFile: Path, logger: Logger? = nil) throws {
         // Read file content
         let configuration: String = try configurationFile.read()
 
@@ -32,14 +38,18 @@ public struct Configuration {
         }
 
         self.tasksConfiguration = yaml
+        self.logger = logger
     }
 
     /// Creates new instance with given configuration.
-    // The configuration must match the yaml spec.
+    /// The configuration must match the yaml spec.
     ///
-    /// - Parameter tasksConfiguration: Yaml format configuration
-    public init(tasksConfiguration: TasksConfiguration) {
+    /// - Parameters:
+    ///   - tasksConfiguration: Yaml format configuration
+    ///   - logger: Tasks logger
+    public init(tasksConfiguration: TasksConfiguration, logger: Logger? = nil) {
         self.tasksConfiguration = tasksConfiguration
+        self.logger = logger
     }
 
     internal func configure(task: TaskType.Type, for key: String) throws -> TaskType? {
@@ -49,6 +59,10 @@ public struct Configuration {
             return nil
         }
 
-        return try task.init(configuration: configuration)
+        var configuredTask = try task.init(configuration: configuration)
+
+        configuredTask.logger = logger
+
+        return configuredTask
     }
 }

@@ -11,6 +11,8 @@ import PathKit
 /// Dotfiles linking task.
 /// This tasks creates symbolic links in user's home directory to each dotfile from given list.
 struct DotfilesTask: TaskType {
+    /// Task logging service
+    var logger: Logger?
 
     /// List of dotfiles
     let dotfiles: [Dotfile]
@@ -30,7 +32,12 @@ struct DotfilesTask: TaskType {
             let linkName = Path("~/\(file.destination.lastComponent)").normalize()
 
             // Try to create actual symlink
-            try linkName.symlink(file.destination)
+            do {
+                try linkName.symlink(file.destination)
+                logger?.log(success: "Created symlink at \(linkName).")
+            } catch {
+                logger?.log(warning: error.localizedDescription)
+            }
         }
     }
 }
