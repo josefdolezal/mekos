@@ -8,24 +8,32 @@
 
 import PathKit
 
+/// MacOS tasks runner.
+/// Runs tasks specified by given configuration.
 public struct MekosRunner {
 
+    /// Tasks configuration
     let configuration: Configuration
 
-    public init(configuration: Configuration) throws {
+    /// Creates new runner with given tasks configuration
+    ///
+    /// - Parameter configuration: Tasks configuration
+    public init(configuration: Configuration) {
         self.configuration = configuration
     }
 
-    public func linkDotfiles() throws {
-        for file in configuration.dotfiles {
-            // Symlink must be normalized because of `~` resolving
-            let symlink = Path("~/\(file.lastComponent)").normalize()
+    /// Runs tasks specified by configuration.
+    ///
+    /// - Throws: MekosError when task cannot be configured or on runtime error
+    public func run() throws {
+        // Create tasks with specified configurations
+        let tasks = try AvalaibleTask.all.flatMap { task in
+            return try configuration.configure(task: task.type, for: task.identifier)
+        }
 
-            print("Creating link for dotfile `\(file.lastComponent)`.")
-
-            try symlink.symlink(file)
-
-            print("Link created.")
+        // Run tasks one by other
+        for task in tasks {
+            try task.run()
         }
     }
 }
