@@ -62,13 +62,15 @@ public struct Configuration {
     internal func configure(task: TaskType.Type, for key: String) throws -> TaskType? {
         // Search given configuration for requested key
         guard let configuration = tasksConfiguration[key] else {
-            print("No configuration for `\(key)` key was provided. Skipping.")
+            logger?.log(message: "No configuration for `\(key)` key was provided. Skipping.")
             return nil
         }
 
+        logger?.log(message: "Loading task with `\(key)` configuration.")
         var configuredTask = try task.init(configuration: configuration)
 
         configuredTask.logger = logger
+        logger?.log(message: "Task `\(key)` loaded successfully.")
 
         return configuredTask
     }
