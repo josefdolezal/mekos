@@ -17,7 +17,22 @@ public class Logger {
         case standard = "\u{001B}[0;39m"
     }
 
-    public init() { }
+    /// Current mode of log level
+    private let mode: LoggerMode
+
+    public init(mode: LoggerMode = .quite) {
+        self.mode = mode
+    }
+
+    /// Common log message describing app flow process.
+    /// This message is omitted if the mode is set to `quite`.
+    ///
+    /// - Parameter message: Message printer
+    public func log(message: String) {
+        guard mode == .verbose else { return }
+
+        createLogEntry(text: message)
+    }
 
     /// Shortcut for success messages
     ///
