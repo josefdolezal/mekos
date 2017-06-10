@@ -10,6 +10,7 @@ let package = Package(
     ],
     dependencies: [
         .Package(url: "https://github.com/jpsim/Yams.git", majorVersion: 0),
-        .Package(url: "https://github.com/kylef/PathKit.git", majorVersion: 0)
+        .Package(url: "https://github.com/kylef/PathKit.git", majorVersion: 0),
+        .Package(url: "https://github.com/kylef/Commander.git", majorVersion: 0, minor: 6)
     ]
 )
