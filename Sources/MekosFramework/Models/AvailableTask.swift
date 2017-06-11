@@ -8,14 +8,17 @@
 import Foundation
 
 /// Represents available task with its identifier expected in configuration.
+/// - dotfiles: Dotfiles linking task
+/// - install: Software installation task
 enum AvalaibleTask: String {
-    /// Dotfiles installation task
     case dotfiles
+    case install
 
     /// Task class type
     var type: TaskType.Type {
         switch self {
         case .dotfiles: return DotfilesTask.self
+        case .install: return InstallTask.self
         }
     }
 
@@ -26,6 +29,6 @@ enum AvalaibleTask: String {
 
     /// All available tasks
     static var all: [AvalaibleTask] {
-        return [.dotfiles]
+        return [.dotfiles, .install]
     }
 }
