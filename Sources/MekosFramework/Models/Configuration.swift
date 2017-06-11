@@ -66,7 +66,7 @@ public struct Configuration {
             return nil
         }
 
-        logger?.log(message: "Loading task with `\(key)` configuration.")
+        logger?.log(message: "Creating task with `\(key)` configuration.")
         var configuredTask = try task.init(configuration: configuration)
 
         configuredTask.logger = logger

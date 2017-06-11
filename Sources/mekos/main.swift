@@ -1,20 +1,27 @@
 import Foundation
 import MekosFramework
 import Commander
+import PathKit
 
 let main = command(
     Flag("verbose", flag: "v", description: "Sets logs level to verbose mode", default: false)
 ) { verbose in
+    let configFile = ".mekos.yaml"
+
     // Shared logger
     let logsMode: LoggerMode = verbose ? .verbose : .quite
     let logger = Logger(mode: logsMode)
 
     // Load tasks configuration from file
-    let configuration = try Configuration(configurationFile: ".mekos.yaml", logger: logger)
+    logger.log(message: "Loading configuration from yaml.")
+    let configuration = try Configuration(configurationFile: Path(configFile), logger: logger)
+    logger.log(message: "Configuration successfully loaded.")
+
     // Create runner with file configuration
     let runner = MekosRunner(configuration: configuration)
 
     // Run tasks
+    logger.log(message: "Runner created. Running tasks...")
     try runner.run()
 }
 

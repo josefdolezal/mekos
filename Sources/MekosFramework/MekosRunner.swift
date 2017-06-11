@@ -27,13 +27,19 @@ public struct MekosRunner {
     /// - Throws: MekosError when task cannot be configured or on runtime error
     public func run() throws {
         // Create tasks with specified configurations
-        let tasks = try AvalaibleTask.all.flatMap { task in
-            return try configuration.configure(task: task.type, for: task.identifier)
+        let tasks = try AvalaibleTask.all.flatMap { task -> (AvalaibleTask, TaskType)? in
+            guard let configuredTask = try configuration.configure(task: task.type, for: task.identifier) else {
+                return nil
+            }
+
+            return (task, configuredTask)
         }
 
         // Run tasks one by other
         for task in tasks {
-            try task.run()
+            configuration.logger?.log(message: "Running task `\(task.0.identifier)`.")
+            try task.1.run()
+            configuration.logger?.log(message: "Task `\(task.0.identifier)` finished successfully.")
         }
     }
 }
