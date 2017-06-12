@@ -23,32 +23,14 @@ struct InstallTask: TaskType {
     }
 
     func run() throws {
-        for installable in installables {
-            logger?.log(message: "Running brew installation of `\(installable)`.")
 
-            if execShellCommand("/usr/local/bin/brew", arguments: ["install", installable]) {
-                logger?.log(success: "The `\(installable)` successfully installed.")
-            } else {
-                logger?.log(error: "The `\(installable)` could not be installed with brew.")
-            }
-        }
-    }
+        logger?.log(message: "Running brew software installation.")
 
-    private func execShellCommand(_ command: String, arguments: [String]) -> Bool {
-        let task = Process()
-        let pipe = Pipe()
+        var brewProvider = BrewProvider(installables: installables)
 
-        task.launchPath = command
-        task.arguments = arguments
-        task.standardOutput = pipe
+        brewProvider.logger = logger
+        brewProvider.install()
 
-        task.launch()
-        task.waitUntilExit()
-
-        if let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
-            logger?.log(message: output)
-        }
-
-        return task.terminationStatus == 0 ? true : false
+        logger?.log(message: "Brew installation finished.")
     }
 }
