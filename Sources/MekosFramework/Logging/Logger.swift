@@ -52,7 +52,11 @@ public class Logger {
     ///
     /// - Parameter error: Error
     public func log(error: Error) {
-        createLogEntry(text: "❌  \(error.localizedDescription)", highlight: .red)
+        log(error: "❌  \(error.localizedDescription)")
+    }
+
+    public func log(error: String) {
+        createLogEntry(text: "❌  \(error)", highlight: .red)
     }
 
     /// Formats log with colors
