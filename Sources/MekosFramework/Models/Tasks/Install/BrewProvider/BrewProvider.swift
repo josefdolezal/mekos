@@ -43,7 +43,7 @@ struct BrewProvider {
             if run(command: command) {
                 logger?.log(success: "The `\(command.arguments)` successfully installed.")
             } else {
-                logger?.log(error: "The `\(command.arguments)` could not be installed with brew.")
+                logger?.log(warning: "The `\(command.arguments)` could not be installed with brew.")
             }
         }
     }
