@@ -55,6 +55,7 @@ struct BrewProvider {
         task.launchPath = BrewCommand.launchPath
         task.arguments = command.arguments
         task.standardOutput = pipe
+        task.standardError = pipe
 
         task.launch()
         task.waitUntilExit()
