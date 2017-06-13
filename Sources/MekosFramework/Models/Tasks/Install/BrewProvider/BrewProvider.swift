@@ -7,63 +7,51 @@
 
 import Foundation
 
+/// Provider of brew software, installs given packages.
 struct BrewProvider {
+    /// Default brew command name
+    private static let brewCommand = "brew"
 
-    enum BrewCommand {
-        case install(String)
-
-        static let launchPath = "/usr/local/bin/brew"
-
-        var action: String {
-            switch self {
-            case .install: return "install"
-            }
-        }
-
-        var arguments: [String] {
-            switch self {
-            case let .install(installable): return [action, installable]
-            }
-        }
-    }
-
+    /// Logging service
     var logger: Logger?
 
-    private let commands: [BrewCommand]
+    /// Brew installation commands
+    private let commands: [ShellCommand]
 
+    /// Creates new provider which can install brew packages.
+    /// The installation itself must be executed manually.
+    ///
+    /// - Parameter installables: Packages which should be installed with brew
     init(installables: [String]) {
-        // Create install commands from list of installables
-        self.commands = installables.map { BrewCommand.install($0) }
+        // Create shell install commands from list of installables
+        self.commands = installables.map { installable in
+            return ShellCommand(command: BrewProvider.brewCommand,
+                                arguments: [BrewCommand.install.rawValue, installable])
+        }
     }
 
+    /// Run installation of given commands
     func install() {
+        // Install each brew software independently
         for command in commands {
-            logger?.log(message: "Running brew installation of `\(command.arguments)`.")
+            // Remove the `install` action from arguments
+            let installable = command.arguments.dropFirst().first ?? "<unknown>"
 
-            if run(command: command) {
-                logger?.log(success: "The `\(command.arguments)` successfully installed.")
-            } else {
-                logger?.log(warning: "The `\(command.arguments)` could not be installed with brew.")
+            logger?.log(message: "Running brew installation of `\(installable)`.")
+
+            do {
+                logger?.log(message: try command.execute())
+                logger?.log(success: "The `\(installable)` successfully installed.")
+            } catch {
+                logger?.log(warning: "The `\(installable)` could not be installed with brew.")
             }
         }
     }
+}
 
-    private func run(command: BrewCommand) -> Bool {
-        let task = Process()
-        let pipe = Pipe()
-
-        task.launchPath = BrewCommand.launchPath
-        task.arguments = command.arguments
-        task.standardOutput = pipe
-        task.standardError = pipe
-
-        task.launch()
-        task.waitUntilExit()
-
-        if let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) {
-            logger?.log(message: output)
-        }
-
-        return task.terminationStatus == 0 ? true : false
-    }
+/// Brew CLI API wrapper
+///
+/// - install: Installs new package
+enum BrewCommand: String {
+    case install
 }
