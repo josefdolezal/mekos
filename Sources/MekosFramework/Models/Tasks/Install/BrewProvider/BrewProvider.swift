@@ -8,7 +8,7 @@
 import Foundation
 
 /// Provider of brew software, installs given packages.
-struct BrewProvider {
+struct BrewProvider: ProviderType {
     /// Default brew command name
     private static let brewCommand = "brew"
 
