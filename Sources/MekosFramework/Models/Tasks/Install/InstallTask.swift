@@ -12,8 +12,14 @@ struct InstallTask: TaskType {
     /// Logging service
     var logger: Logger?
 
-    let configurations: [String: Any]
+    /// Providers configurations
+    private let configurations: [String: Any]
 
+    /// Creates new task with given configuration.
+    /// Tryes to configure providers from given configuration.
+    ///
+    /// - Parameter configuration: Yaml formatted configuration
+    /// - Throws: MekosError on invalid configuration
     init(configuration: Any) throws {
         guard let configurations = configuration as? [String: Any] else {
             throw MekosError.invalidConfigurationFile
@@ -22,27 +28,27 @@ struct InstallTask: TaskType {
         self.configurations = configurations
     }
 
+    /// Runs the installation with configured providers
+    ///
+    /// - Throws: MekosError on failure
     func run() throws {
-        if let brewInstallables = configurations["brew"] as? [String] {
-            logger?.log(message: "Running brew software installation.")
+        // Try to initiate available providers
+        for providerType in AvailableProvider.all {
+            // Check if current provider is configured by user
+            guard let installables = configurations[providerType.identifier] as? [String] else {
+                logger?.log(message: "No configuration for `\(providerType.identifier)` provider. Skipping.")
+                continue
+            }
 
-            var brewProvider = BrewProvider(installables: brewInstallables)
+            logger?.log(message: "Running `\(providerType.identifier)` software installation.")
 
-            brewProvider.logger = logger
-            brewProvider.install()
+            // Create provider and run installations
+            var provider = providerType.provider.init(installables: installables)
 
-            logger?.log(message: "Brew installation finished.")
-        }
+            provider.logger = logger
+            provider.install()
 
-        if let appStoreInstallables = configurations["app_store"] as? [String] {
-            logger?.log(message: "Running App Store software installation.")
-
-            var appStoreProvider = AppStoreProvider(installables: appStoreInstallables)
-
-            appStoreProvider.logger = logger
-            appStoreProvider.install()
-
-            logger?.log(message: "App Store installation finished.")
+            logger?.log(message: "Provider installation finished.")
         }
     }
 }
