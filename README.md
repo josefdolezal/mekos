@@ -1,2 +1,1 @@
-# mekos
-Automation tool for macOS bootstrap.
+# mekos [![Build Status](https://travis-ci.com/josefdolezal/mekos.svg?token=AxpSW7yys3aiQpPG9zMW&branch=master)](https://travis-ci.com/josefdolezal/mekos)
