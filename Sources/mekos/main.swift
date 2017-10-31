@@ -4,7 +4,7 @@ import Commander
 import PathKit
 
 let main = command(
-    Flag("verbose", flag: "v", description: "Sets logs level to verbose mode", default: false)
+    Flag("verbose", default: false, flag: "v", description: "Sets logs level to verbose mode")
 ) { verbose in
     let configFile = ".mekos.yaml"
 

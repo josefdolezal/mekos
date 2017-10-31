@@ -1,16 +1,28 @@
-// swift-tools-version:3.1
+// swift-tools-version:4.0
 
 import PackageDescription
 
 let package = Package(
     name: "mekos",
-    targets: [
-        Target(name: "mekos", dependencies: ["MekosFramework"]),
-        Target(name: "MekosFramework")
+    products: [
+        .executable(
+            name: "mekos",
+            targets: ["mekos"]),
+        .library(
+            name: "MekosFramework",
+            targets: ["MekosFramework"])
     ],
     dependencies: [
-        .Package(url: "https://github.com/jpsim/Yams.git", majorVersion: 0),
-        .Package(url: "https://github.com/kylef/PathKit.git", majorVersion: 0),
-        .Package(url: "https://github.com/kylef/Commander.git", majorVersion: 0, minor: 6)
+        .package(url: "https://github.com/jpsim/Yams.git", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "0.7.0")),
+        .package(url: "https://github.com/kylef/Commander.git", .branch("master"))
+    ],
+    targets: [
+        .target(
+            name: "mekos",
+            dependencies: ["MekosFramework", "Commander", "PathKit"]),
+        .target(
+            name: "MekosFramework",
+            dependencies: ["Yams", "PathKit"])
     ]
 )
