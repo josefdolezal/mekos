@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+public class SystemDSL {
+    public let expose = Expose()
+}

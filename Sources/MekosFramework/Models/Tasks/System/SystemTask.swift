@@ -29,18 +29,6 @@ struct SystemTask: TaskType {
     ///
     /// - Throws: MekosError on runtime error
     func run() throws {
-        guard let exposeConfig = configuration["expose"] else {
-            logger?.log(message: "Expose configuration not specified. Skipping.")
-            return
-        }
-
-        logger?.log(message: "Creating system service `expose`.")
-        var exposeService = try ExposeService(configuration: exposeConfig)
-        logger?.log(message: "Service `expose` created.")
-
-        exposeService.logger = logger
-        logger?.log(message: "Running service `expose`.")
-        try exposeService.run()
-        logger?.log(message: "Service `expose` finished.")
+        
     }
 }
