@@ -29,6 +29,6 @@ struct SystemTask: TaskType {
     ///
     /// - Throws: MekosError on runtime error
     func run() throws {
-        
+
     }
 }

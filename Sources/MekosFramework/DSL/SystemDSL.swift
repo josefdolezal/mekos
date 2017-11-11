@@ -9,4 +9,6 @@ import Foundation
 
 public class SystemDSL {
     public let expose = Expose()
+    public let brew = BrewInstaller()
+    public let appStore = AppStoreInstaller()
 }

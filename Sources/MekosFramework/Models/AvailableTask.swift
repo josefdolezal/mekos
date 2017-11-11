@@ -13,14 +13,12 @@ import Foundation
 /// - system: System configuration task
 enum AvalaibleTask: String {
     case dotfiles
-    case install
     case system
 
     /// Task class type
     var type: TaskType.Type {
         switch self {
         case .dotfiles: return DotfilesTask.self
-        case .install: return InstallTask.self
         case .system: return SystemTask.self
         }
     }
@@ -32,6 +30,6 @@ enum AvalaibleTask: String {
 
     /// All available tasks
     static var all: [AvalaibleTask] {
-        return [.dotfiles, .install, .system]
+        return [.dotfiles, .system]
     }
 }
