@@ -29,13 +29,13 @@ public struct Expose {
     }
 
     private func setup(corner: HotCorner, action: ExposeAction) {
-        let setter = ShellCommand(
+        let setter = Shell(
             command: Expose.defaultsCommand,
             arguments: ["write", Expose.dockIdentifier, corner.identifier,
                         "-int", "\(action.code)"]
         )
 
-        let modifier = ShellCommand(
+        let modifier = Shell(
             command: Expose.defaultsCommand,
             arguments: ["write", Expose.dockIdentifier, corner.modifier,
                         "-int", "\(action.code)"]

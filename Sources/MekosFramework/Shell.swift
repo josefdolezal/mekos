@@ -1,5 +1,5 @@
 //
-//  ShellCommand.swift
+//  Shell.swift
 //  MekosFramework
 //
 //  Created by Josef Dolezal on 13/06/2017.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Shell command abstraction.
-struct ShellCommand {
+struct Shell {
     /// Command which will be executed by user's default shell
     let command: String
 
@@ -42,7 +42,7 @@ struct ShellCommand {
         let stdout = Pipe()
         let stderr = Pipe()
 
-        task.launchPath = ShellCommand.defaultShellPath
+        task.launchPath = Shell.defaultShellPath
         task.arguments = [command] + arguments
         // Log both standerd output and error into created pipe
         task.standardOutput = stdout
@@ -53,8 +53,8 @@ struct ShellCommand {
         task.waitUntilExit()
 
         // Throw error when command returned unsuccessfull status code
-        if Int(task.terminationStatus) != ShellCommand.successfullExitCode {
-            throw ShellCommandError.unsuccessfullStatusCode(
+        if Int(task.terminationStatus) != Shell.successfullExitCode {
+            throw ShellError.unsuccessfullStatusCode(
                 command: command,
                 error: String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
             )
@@ -68,7 +68,7 @@ struct ShellCommand {
 /// Shell command execution
 ///
 /// - unsuccessfullStatusCode: Thrown when unsuccessfull code is returned from command execution
-enum ShellCommandError: Error, CustomStringConvertible {
+enum ShellError: Error, CustomStringConvertible {
     case unsuccessfullStatusCode(command: String, error: String?)
 
     var description: String {
