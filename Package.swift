@@ -13,14 +13,13 @@ let package = Package(
             targets: ["MekosFramework"])
     ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams.git", .upToNextMinor(from: "0.3.0")),
-        .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "0.7.0")),
-        .package(url: "https://github.com/kylef/Commander.git", .branch("master"))
+        .package(url: "https://github.com/jpsim/Yams.git", .upToNextMinor(from: "0.5.0")),
+        .package(url: "https://github.com/kylef/PathKit.git", .upToNextMinor(from: "0.8.0")),
     ],
     targets: [
         .target(
             name: "mekos",
-            dependencies: ["MekosFramework", "Commander", "PathKit"]),
+            dependencies: ["MekosFramework", "PathKit"]),
         .target(
             name: "MekosFramework",
             dependencies: ["Yams", "PathKit"])
