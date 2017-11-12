@@ -17,6 +17,11 @@ public struct BrewInstaller {
         try! BrewInstaller.execute(subcommand: "install", arguments: packages)
     }
 
+    /// Runs brew repos update
+    public func update() {
+        try! BrewInstaller.execute(subcommand: "update")
+    }
+
     /// Executes brew subcommand with given arguments
     ///
     /// - Parameters:
