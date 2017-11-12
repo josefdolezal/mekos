@@ -12,10 +12,12 @@ import Foundation
 /// for App Store API under the hood.
 public struct AppStoreInstaller {
     /// Default AppStore command name
-    private static let appStoreCommand = "mas"
+    private static let appStore = "mas"
 
     /// Installs software from App Store
     public func install(_ applications: [String]) {
+        let command = Shell(command: AppStoreInstaller.appStore, arguments: applications)
 
+        _ = try! command.execute()
     }
 }
